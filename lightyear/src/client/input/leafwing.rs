@@ -661,6 +661,7 @@ fn send_input_messages<A: LeafwingUserAction>(
         message_buffer.0.len()
     );
     for mut message in message_buffer.0.drain(..) {
+        
         connection
             .send_message::<InputChannel, InputMessage<A>>(&mut message)
             .unwrap_or_else(|err| {

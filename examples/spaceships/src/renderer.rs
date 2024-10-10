@@ -41,9 +41,9 @@ impl Plugin for SpaceshipsRendererPlugin {
         app.insert_resource(ClearColor::default());
         // app.insert_resource(ClearColor(css::DARK_GRAY.into()));
         let draw_shadows = false;
-        // draw last to ensure all the interpolation/syncing stuff has happened
+        // draw after visual corrections
         app.add_systems(
-            Last,
+            PostUpdate,
             (
                 add_player_label,
                 update_player_label,
@@ -53,7 +53,8 @@ impl Plugin for SpaceshipsRendererPlugin {
                 draw_confirmed_entities.run_if(is_server),
                 draw_explosions,
             )
-                .chain(),
+                .chain()
+                .after(PredictionSet::VisualCorrection),
         );
 
         app.add_systems(FixedPreUpdate, insert_bullet_mesh);
